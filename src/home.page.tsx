@@ -9,7 +9,8 @@ export const Home:React.FC=()=>{
                     <DenseAppBar/>
                 </Grid>
                 <Grid>
-                <Imgcard />
+                
+                <App/>
                 </Grid>
             </Stack >
         </Box>
@@ -34,19 +35,20 @@ export default function DenseAppBar() {
   );
 }/* end of bar*/
 
-export const Imgcard:React.FC=()=> {
+export const Imgcard:React.FC<{img:any;p:any;t:any;}>=(prop)=> {
     
     return (
       <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
-          component="img"
-          alt="..."
-          height="140"
-          image="https://api.slingacademy.com/public/sample-photos/1.jpeg"
-        />
+        <CardMedia component="img" alt="..." height="200" image={prop.img} />
         <CardContent>
+        <Typography gutterBottom variant="h6" component="div">
+            Title:{prop.t}
+          </Typography>
           <Typography gutterBottom variant="h5" component="div">
             Test Api
+          </Typography>
+          <Typography gutterBottom variant="h6" component="div">
+            Price:{prop.p}
           </Typography>
           
         </CardContent>
@@ -56,4 +58,28 @@ export const Imgcard:React.FC=()=> {
       </Card>
     );
   } /* end of card*/
+
+const url='https://fakestoreapi.com/products'
+export const App:React.FC=()=>{
+    var [data,setData] = useState([]);
+    useEffect(()=>{
+        fetch(url)
+        .then(res=>res.json())
+        .then((result)=>{setData(result);
+        })
+    },[])
+
+    return<>
+        
+        <h1>This test call for Build</h1>
+        <Grid container direction='row' spacing={2} >
+           {data?.map((item:any)=> {
+            return <>
+            <Imgcard img={item.image} p={item.price} t={item.title} />
+            </>
+           })}
+        </Grid>
+
+        </>
+}
 
